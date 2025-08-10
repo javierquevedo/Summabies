@@ -4,30 +4,36 @@
  */
 
 /**
- * Extract project name from message text
+ * Extract project names from message text
  * Expects format: [ProjectName] message content
+ * Can handle multiple project tags in a single message
  * 
  * @param {string} text - Message text to parse
- * @returns {string|null} - Project name if found, null otherwise
+ * @returns {string[]} - Array of project names found
  */
-function extractProject(text) {
+function extractProjects(text) {
   if (!text || typeof text !== 'string') {
-    return null;
+    return [];
   }
   
-  // Match [ProjectName] pattern at the beginning of the message
-  const match = text.match(/^\[(.+?)\]/);
-  return match ? match[1].trim() : null;
+  // Match all [ProjectName] patterns in the message
+  const matches = text.match(/\[(.+?)\]/g);
+  if (!matches) {
+    return [];
+  }
+  
+  // Extract and trim project names
+  return matches.map(match => match.substring(1, match.length - 1).trim());
 }
 
 /**
- * Check if a message contains a valid project tag
+ * Check if a message contains any valid project tags
  * 
  * @param {string} text - Message text to check
- * @returns {boolean} - True if message has project tag
+ * @returns {boolean} - True if message has at least one project tag
  */
 function hasProjectTag(text) {
-  return extractProject(text) !== null;
+  return extractProjects(text).length > 0;
 }
 
 /**
@@ -42,7 +48,7 @@ function normalizeProjectName(projectName) {
 }
 
 module.exports = {
-  extractProject,
+  extractProjects,
   hasProjectTag,
   normalizeProjectName
 };
