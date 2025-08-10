@@ -1,4 +1,4 @@
-name: Lint Code
+name: Lint and Test
 
 on:
   pull_request:
@@ -26,11 +26,5 @@ jobs:
     - name: Run ESLint
       run: npx eslint .
       
-    - name: Check for linting errors
-      run: |
-        if [ $? -ne 0 ]; then
-          echo "❌ Linting failed. Please fix the issues above."
-          exit 1
-        else
-          echo "✅ All code passed linting checks!"
-        fi
+    - name: Run unit tests
+      run: npm test
