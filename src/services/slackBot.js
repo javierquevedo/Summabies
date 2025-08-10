@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const { extractProject } = require('../utils/projectExtractor');
+const { extractProjects } = require('../utils/projectExtractor');
 
 /**
  * Slack bot service for handling events and bot operations
@@ -88,13 +88,12 @@ class SlackBot {
           messageKeys: event.message ? Object.keys(event.message) : []
         });
         
-        // Extract project from message text
+        // Extract projects from message text
         // Slack message event contains the message in event.message.text
-        const project = extractProject(event.message.text);
+        const projects = extractProjects(event.message.text);
         
-        if (project) {
-          // Store message for the project
-          // Extract the relevant fields from the Slack message event
+        if (projects.length > 0) {
+          // Store message for each project found
           const messageData = {
             user: event.message.user,
             text: event.message.text,
@@ -102,9 +101,11 @@ class SlackBot {
             channel: event.channel,
             team: event.team
           };
-          
-          this.messageStore.storeMessage(project, messageData);
-          logger.info(`Stored message for project: ${project} from user: ${event.message.user}`);
+
+          projects.forEach(project => {
+            this.messageStore.storeMessage(project, messageData);
+            logger.info(`Stored message for project: ${project} from user: ${event.message.user}`);
+          });
         }
         
         this.eventHandlers.message = true;
