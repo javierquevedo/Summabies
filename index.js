@@ -1,3 +1,5 @@
+
+/* eslint-env node */
 require('dotenv').config();
 const { App, ExpressReceiver } = require('@slack/bolt');
 const cron = require('node-cron');
