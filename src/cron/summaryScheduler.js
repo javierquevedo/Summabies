@@ -20,12 +20,12 @@ class SummaryScheduler {
    * Runs every minute to process project messages
    */
   start() {
-    // Schedule job to run every minute
-    this.job = cron.schedule('* * * * *', async () => {
+    // Schedule job to run every 10 seconds
+    this.job = cron.schedule('*/10 * * * * *', async () => {
       await this.processSummaries();
     });
 
-    logger.info('Summary scheduler started - running every minute');
+    logger.info('Summary scheduler started - running every 10 seconds');
   }
 
   /**
@@ -48,7 +48,12 @@ class SummaryScheduler {
     const projects = this.messageStore.getProjectsWithMessages();
     
     for (const project of projects) {
-      await this.processProjectSummary(project);
+      try {
+        await this.processProjectSummary(project);
+      } catch (error) {
+        logger.logError(`Failed to process summary for project: ${project}`, error);
+        // Continue processing other projects even if one fails
+      }
     }
   }
 
@@ -109,8 +114,8 @@ class SummaryScheduler {
   getStatus() {
     return {
       isRunning: this.job !== null,
-      schedule: '* * * * *', // Every minute
-      nextRun: this.job ? 'Every minute' : 'Not scheduled'
+      schedule: '*/10 * * * * *', // Every 10 seconds
+      nextRun: this.job ? 'Every 10 seconds' : 'Not scheduled'
     };
   }
 }

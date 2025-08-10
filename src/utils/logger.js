@@ -23,7 +23,14 @@ const LOG_LEVELS = {
  */
 function formatLogMessage(level, message, data = null) {
   const timestamp = new Date().toISOString();
-  const dataStr = data ? ` | ${JSON.stringify(data)}` : '';
+  let dataStr = '';
+  if (data) {
+    try {
+      dataStr = ` | ${JSON.stringify(data)}`;
+    } catch (error) {
+      dataStr = ` | [Circular or non-serializable data]`;
+    }
+  }
   return `[${timestamp}] [${level}] ${message}${dataStr}`;
 }
 
@@ -97,7 +104,15 @@ function logSummaryPosted(project, messageCount) {
 }
 
 function logError(context, error) {
-  console.error(formatLogMessage(LOG_LEVELS.ERROR, `[ERROR] ${context}`, error.response ? error.response.data : error));
+  let errorData;
+  if (error.response && error.response.data) {
+    errorData = error.response.data;
+  } else if (error.message) {
+    errorData = { message: error.message };
+  } else {
+    errorData = error;
+  }
+  console.error(formatLogMessage(LOG_LEVELS.ERROR, `[ERROR] ${context}`, errorData));
 }
 
 module.exports = {

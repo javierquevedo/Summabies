@@ -95,7 +95,7 @@ Tag your messages with project identifiers in square brackets:
 
 ### Automatic Summarization
 
-- **Frequency**: Every 1 minute
+- **Frequency**: Every 10 seconds
 - **Output**: AI-generated summaries posted to your Slack channel
 - **Format**: 
   ```
@@ -117,7 +117,7 @@ Tag your messages with project identifiers in square brackets:
 
 ### Customization
 
-- **Summarization Frequency**: Modify the cron schedule in `index.js`
+- **Summarization Frequency**: Modify the cron schedule in `index.js` (currently set to every 10 seconds)
 - **AI Model**: Change the Perplexity model in the API call
 - **Summary Length**: Adjust `max_tokens` parameter
 - **Project Detection**: Modify the regex pattern in `extractProject()`
