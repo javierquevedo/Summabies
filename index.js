@@ -49,8 +49,8 @@ app.message(async ({ message, say }) => {
   console.log(`[RECEIVED] Project: ${project}, User: ${message.user}, Text: ${message.text}`);
 });
 
-// --- Summarize and post every minute (Perplexity integration) ---
-cron.schedule('* * * * *', async () => {
+// --- Summarize and post every 10 seconds (Perplexity integration) ---
+cron.schedule('*/10 * * * * *', async () => {
   console.log(`[CRON] Summarization timer triggered at ${new Date().toLocaleTimeString()}`);
   for (const [project, messages] of Object.entries(projectMessages)) {
     if (messages.length === 0) {

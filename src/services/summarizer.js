@@ -126,7 +126,7 @@ Please provide a clear, actionable summary in 2-3 sentences.`;
   async validateApiKey() {
     try {
       const response = await this.callPerplexityAPI('Hello, this is a test message.');
-      return response && response.choices && response.choices[0];
+      return !!(response && response.choices && response.choices[0]);
     } catch (error) {
       logger.error('API key validation failed:', error);
       return false;
