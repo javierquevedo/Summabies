@@ -57,6 +57,7 @@ class SlackBot {
       logger.info('Slack bot stopped successfully');
     } catch (error) {
       logger.error('Failed to stop Slack bot', error);
+      // Don't set isRunning to false if stop failed
       throw error;
     }
   }
@@ -127,6 +128,8 @@ class SlackBot {
         this.eventHandlers.appMention = true;
       } catch (error) {
         logger.error('Error handling app mention event:', error);
+        // Still set the flag even if logging fails
+        this.eventHandlers.appMention = true;
       }
     });
   }

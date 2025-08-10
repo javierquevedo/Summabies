@@ -17,7 +17,11 @@ function extractProject(text) {
   
   // Match [ProjectName] pattern at the beginning of the message
   const match = text.match(/^\[(.+?)\]/);
-  return match ? match[1].trim() : null;
+  if (!match) return null;
+  
+  const projectName = match[1];
+  // Return null for empty brackets (only spaces), preserve spacing for non-empty names
+  return projectName.trim() === '' ? null : projectName;
 }
 
 /**
