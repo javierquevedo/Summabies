@@ -38,7 +38,8 @@ class MessageStore {
    * @returns {Array} - Array of messages for the project
    */
   getProjectMessages(project) {
-    return this.projectMessages[project] || [];
+    const messages = this.projectMessages[project] || [];
+    return [...messages]; // Return a copy to prevent external modification
   }
 
   /**
@@ -58,9 +59,9 @@ class MessageStore {
    * @returns {Array} - Array of project names that have messages
    */
   getProjectsWithMessages() {
-    return Object.keys(this.projectMessages).filter(project => 
-      this.hasMessages(project)
-    );
+    return Object.keys(this.projectMessages)
+      .filter(project => this.hasMessages(project))
+      .sort(); // Sort alphabetically
   }
 
   /**
